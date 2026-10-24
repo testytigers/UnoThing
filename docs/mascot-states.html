@@ -1,0 +1,1017 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mascot States</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F2EA;
+    --bg-deep: #ECE6DA;
+    --surface: #FFFFFF;
+    --ink: #1A1B2E;
+    --ink-muted: #6F6B66;
+    --ink-faint: #A8A39A;
+    --brand: #6A8DFF;
+    --brand-soft: #E4EAFF;
+    --brand-ink: #3B5BDB;
+    --button: #26283D;
+    --on-button: #FFFFFF;
+    --border: #E9E3D7;
+    --shadow-rgb: 26, 27, 46;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15161F;
+      --bg-deep: #1E2030;
+      --surface: #22253A;
+      --ink: #F3F0E8;
+      --ink-muted: #B3AFA7;
+      --ink-faint: #7D7A74;
+      --brand-soft: #2B3360;
+      --brand-ink: #A9BBFF;
+      --button: #F3F0E8;
+      --on-button: #1A1B2E;
+      --border: #2E3148;
+      --shadow-rgb: 0, 0, 0;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15161F;
+    --bg-deep: #1E2030;
+    --surface: #22253A;
+    --ink: #F3F0E8;
+    --ink-muted: #B3AFA7;
+    --ink-faint: #7D7A74;
+    --brand-soft: #2B3360;
+    --brand-ink: #A9BBFF;
+    --button: #F3F0E8;
+    --on-button: #1A1B2E;
+    --border: #2E3148;
+    --shadow-rgb: 0, 0, 0;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 16px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 16px 72px; }
+  @media (min-width: 720px) { .wrap { padding: 56px 32px 96px; } }
+
+  .display { font-family: Rubik, Inter, sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand-ink); }
+  h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.04; margin: 10px 0 12px; }
+  h2 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.1; margin: 0 0 6px; }
+  .lede { color: var(--ink-muted); max-width: 640px; margin: 0; }
+  section { margin-top: 56px; }
+  .section-sub { color: var(--ink-muted); margin: 0 0 20px; max-width: 640px; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .chip {
+    appearance: none; border: 0; cursor: pointer;
+    min-height: 44px; padding: 0 16px; border-radius: 14px;
+    background: var(--surface); color: var(--ink);
+    font: 600 15px/1 Inter, system-ui, sans-serif;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .15s ease, background-color .2s ease;
+  }
+  .chip:active { transform: scale(.97); }
+  .chip[aria-pressed="true"] { background: var(--brand); color: #1A1B2E; }
+  .chip:focus-visible { outline: 3px solid var(--brand-ink); outline-offset: 2px; }
+  .chip.dark { background: var(--button); color: var(--on-button); }
+
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+  .card {
+    background: var(--surface); border-radius: 24px; padding: 14px 16px 18px;
+    display: flex; flex-direction: column; cursor: pointer; border: 0; text-align: left;
+    color: inherit; font: inherit;
+    transition: transform .2s ease;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card:focus-visible { outline: 3px solid var(--brand-ink); outline-offset: 2px; }
+  .card .stage { background: var(--bg); border-radius: 18px; aspect-ratio: 1 / 1; display: grid; place-items: center; }
+  .card canvas { width: 78%; aspect-ratio: 1 / 1; }
+  .card h3 { font-size: 22px; margin: 14px 0 2px; }
+  .card p { margin: 0; color: var(--ink-muted); font-size: 14px; line-height: 1.45; }
+  .uses { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .use { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-ink); }
+
+  .playground { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .playground { grid-template-columns: 1.1fr 1fr; } }
+  .panel { background: var(--surface); border-radius: 28px; padding: 18px; }
+  .big-stage { background: var(--bg); border-radius: 22px; display: grid; place-items: center; aspect-ratio: 4 / 3; }
+  .big-stage canvas { width: min(70%, 320px); aspect-ratio: 1 / 1; }
+  .now { margin: 14px 2px 0; color: var(--ink-muted); font-size: 14px; }
+  .now strong { color: var(--ink); }
+  .mood-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .panel .chip { background: var(--bg); }
+  .panel .chip.dark { background: var(--button); color: var(--on-button); }
+  .panel .chip[aria-pressed="true"] { background: var(--brand); color: #1A1B2E; }
+  .row-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+  .context { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .context { grid-template-columns: 1fr 1fr; } }
+  .context .panel h3 { font-size: 20px; margin: 0 0 4px; }
+  .context .panel > p { margin: 0 0 14px; color: var(--ink-muted); font-size: 14px; }
+
+  .phone { background: #F6F2EA; border-radius: 26px; overflow: hidden; position: relative; max-width: 380px; margin: 0 auto; }
+  .phone .head { padding: 26px 20px 10px; text-align: center; color: #1A1B2E; }
+  .phone .head .display { font-size: 30px; line-height: 1.05; }
+  .peek { position: relative; }
+  .peek canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .peek .belly { position: relative; padding: 0 16px 18px; display: grid; gap: 10px; }
+  .field { height: 46px; border-radius: 14px; background: #fff; display: flex; align-items: center; padding: 0 14px; color: #A8A39A; font-weight: 500; font-size: 15px; }
+  .field.on { outline: 2px solid #1A1B2E; color: #1A1B2E; }
+  .btn { height: 46px; border-radius: 14px; background: #26283D; color: #fff; display: grid; place-items: center; font-weight: 600; font-size: 15px; }
+
+  .bubble-row { display: flex; align-items: flex-end; gap: 2px; background: var(--bg); border-radius: 22px; padding: 22px 16px; min-height: 120px; }
+  .bubble-row canvas { width: 64px; height: 64px; flex: none; }
+  .bubble { position: relative; background: #fff; color: #1A1B2E; border-radius: 20px; padding: 12px 16px; font-weight: 600; font-size: 15px; line-height: 1.35; margin-left: 8px; margin-bottom: 6px; }
+  .bubble::before { content: ""; position: absolute; left: -7px; bottom: 14px; border: 8px solid transparent; border-right-color: #fff; border-left: 0; }
+
+  .guide { display: flex; align-items: center; gap: 8px; background: #fff; color: #1A1B2E; border-radius: 24px; padding: 10px 14px 10px 10px; }
+  .guide canvas { width: 76px; height: 76px; flex: none; }
+  .guide .msg { flex: 1; font-weight: 600; font-size: 15px; line-height: 1.35; min-height: 3.6em; display: flex; align-items: center; }
+  .pie { width: 46px; height: 46px; flex: none; }
+  .guide-wrap { background: #F6F2EA; border-radius: 22px; padding: 14px; }
+
+  .icons { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end; }
+  .icon { display: grid; justify-items: center; gap: 8px; font-size: 13px; color: var(--ink-muted); }
+  .tile { width: 112px; height: 112px; border-radius: 30px; display: grid; place-items: center; overflow: hidden; }
+  .tile canvas { width: 76%; height: 76%; }
+  .tile.cream { background: #F6F2EA; box-shadow: inset 0 0 0 1px var(--border); }
+  .tile.black { background: #111; }
+  .sizes { display: flex; align-items: flex-end; gap: 14px; }
+
+  .motion { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+  .motion .panel { padding: 16px 18px; border-radius: 22px; }
+  .motion h4 { margin: 0 0 4px; font-size: 16px; }
+  .motion p { margin: 0; color: var(--ink-muted); font-size: 14px; }
+  .num { font-variant-numeric: tabular-nums; color: var(--brand-ink); font-weight: 700; }
+
+  footer { margin-top: 56px; color: var(--ink-faint); font-size: 13px; }
+  @media (prefers-reduced-motion: reduce) { .card, .chip { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">The One Thing · Mascot</div>
+    <h1 class="display">Every mood of our drop</h1>
+    <p class="lede">Every drawing below is live, ported from the app's painter: the same drop, the same face, the same motion. Tap a card to make it spin and talk.</p>
+    <div class="toolbar" role="group" aria-label="Display options">
+      <button class="chip" id="t-animate" aria-pressed="true">Animate</button>
+      <button class="chip" id="t-facing" aria-pressed="false">Three-quarter view</button>
+      <button class="chip dark" id="t-hello">Everyone say hi</button>
+    </div>
+  </header>
+
+  <section aria-labelledby="moods-h">
+    <h2 class="display" id="moods-h">The moods</h2>
+    <p class="section-sub">Eleven expressions, each a pair of eyes, a mouth and sometimes an extra. The chips show where each one appears in the app.</p>
+    <div class="grid" id="moods"></div>
+  </section>
+
+  <section aria-labelledby="play-h">
+    <h2 class="display" id="play-h">Changing moods</h2>
+    <p class="section-sub">On every change the drop spins a full turn with a little hop, swaps its face while it looks away, then lands with a squash. Pick a mood and watch.</p>
+    <div class="playground">
+      <div class="panel">
+        <div class="big-stage"><canvas id="stage" role="img" aria-label="The mascot, large"></canvas></div>
+        <p class="now">Now: <strong id="now-mood">idle</strong></p>
+      </div>
+      <div class="panel">
+        <div class="mood-buttons" id="mood-buttons" role="group" aria-label="Choose a mood"></div>
+        <div class="row-actions">
+          <button class="chip dark" id="p-talk">Talk</button>
+          <button class="chip" id="p-spin">Spin</button>
+          <button class="chip" id="p-shuffle">Surprise me</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="ctx-h">
+    <h2 class="display" id="ctx-h">In the app</h2>
+    <p class="section-sub">How the drop shows up on screen. The buttons replay the moments it reacts to.</p>
+    <div class="context">
+      <div class="panel">
+        <h3 class="display">Login: peeking up</h3>
+        <p>Its huge body rises from the bottom of the screen with the form on its belly.</p>
+        <div class="phone" id="login">
+          <div class="head">
+            <div class="display">One thing.<br>Every day.</div>
+          </div>
+          <div class="peek" id="peek">
+            <canvas id="peek-canvas" role="img" aria-label="The mascot peeking up behind the login form"></canvas>
+            <div class="belly" id="belly">
+              <div class="field" id="f-email">Email</div>
+              <div class="field" id="f-pass">Password</div>
+              <div class="btn">Login</div>
+            </div>
+          </div>
+        </div>
+        <div class="row-actions" role="group" aria-label="Login moments">
+          <button class="chip" data-login="email">Typing email</button>
+          <button class="chip" data-login="password">Typing password</button>
+          <button class="chip" data-login="typo">A typo</button>
+          <button class="chip" data-login="refused">Wrong password</button>
+          <button class="chip" data-login="busy">Signing in</button>
+          <button class="chip" data-login="idle">Waiting</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 class="display">Onboarding guide</h3>
+        <p>A card on top of each step: the drop, what it says now, and a progress pie. It talks whenever the message changes.</p>
+        <div class="guide-wrap">
+          <div class="guide">
+            <canvas id="guide-canvas" role="img" aria-label="The mascot in the onboarding guide"></canvas>
+            <div class="msg" id="guide-msg" aria-live="polite"></div>
+            <svg class="pie" viewBox="0 0 46 46" aria-hidden="true">
+              <circle cx="23" cy="23" r="20.5" fill="none" stroke="#ECE6DA" stroke-width="5"/>
+              <circle id="pie-arc" cx="23" cy="23" r="20.5" fill="none" stroke="#6A8DFF" stroke-width="5" stroke-linecap="round" transform="rotate(-90 23 23)" stroke-dasharray="0 200"/>
+              <text id="pie-text" x="23" y="27.5" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="12" fill="#1A1B2E">1/5</text>
+            </svg>
+          </div>
+        </div>
+        <div class="row-actions"><button class="chip dark" id="guide-next">Next message</button></div>
+
+        <h3 class="display" style="margin-top:22px">Coach bubble</h3>
+        <p style="margin:0 0 14px;color:var(--ink-muted);font-size:14px">Under today's cup and on the session screens, turned toward what it says.</p>
+        <div class="bubble-row">
+          <canvas id="coach-canvas" role="img" aria-label="The mascot speaking"></canvas>
+          <div class="bubble" id="coach-msg" aria-live="polite"></div>
+        </div>
+        <div class="row-actions"><button class="chip dark" id="coach-next">Next line</button></div>
+      </div>
+
+      <div class="panel">
+        <h3 class="display">App icon</h3>
+        <p>The whole drop in its shades, plus the themed (monochrome) layer Android tints.</p>
+        <div class="icons">
+          <div class="icon"><div class="tile cream"><canvas id="icon-color" role="img" aria-label="App icon"></canvas></div>Launcher</div>
+          <div class="icon"><div class="tile black"><canvas id="icon-mono" role="img" aria-label="Themed icon"></canvas></div>Themed</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 class="display">Sizes</h3>
+        <p>From the toast to the guide: the face stays readable down to 32 px.</p>
+        <div class="sizes" id="sizes"></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="motion-h">
+    <h2 class="display" id="motion-h">How it moves</h2>
+    <p class="section-sub">Small, constant life, all of it still when the phone asks for reduced motion.</p>
+    <div class="motion">
+      <div class="panel"><h4>Hand-drawn boil</h4><p>The outline redraws with a soft wobble <span class="num">8</span> times a second, like a hand-animated line.</p></div>
+      <div class="panel"><h4>Breathing</h4><p>The body rises and settles every <span class="num">3.6 s</span>; open smiles breathe with it.</p></div>
+      <div class="panel"><h4>Blinks</h4><p>Every <span class="num">2.2 to 5.6 s</span>, sometimes a quick double. Oval eyes squeeze to a line.</p></div>
+      <div class="panel"><h4>Glances and darts</h4><p>It turns its face to one side now and then, and its eyes dart a little inside the face.</p></div>
+      <div class="panel"><h4>Spin on a mood change</h4><p>A full turn in <span class="num">0.75 s</span> with a hop. The new face is swapped in while it looks away; it lands with a squash.</p></div>
+      <div class="panel"><h4>Eyes and mouth apart</h4><p>The mouth follows a turn a beat later (at most <span class="num">0.3 rad</span> behind) and sits deeper, so the face is never one rigid stamp.</p></div>
+      <div class="panel"><h4>Talking</h4><p>When its message changes, the mouth opens and closes about <span class="num">4</span> times a second for <span class="num">1.2 s</span>.</p></div>
+      <div class="panel"><h4>Three-quarter view</h4><p>Next to a speech bubble it rests turned toward it, so it reads as talking to you.</p></div>
+    </div>
+  </section>
+
+  <footer>Drawn live in your browser from a port of <code>lib/widgets/mascot/mascot_painter.dart</code>. Colors: body #6A8DFF, face #1A1B2E.</footer>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ---- Tokens ----------------------------------------------------------
+  const BODY = '#6A8DFF';
+  const INK = '#1A1B2E';
+  const WHITE = '#FFFFFF';
+  const BLUSH = '#FF8FA3';
+  let shadowRgb = '26, 27, 46';
+  let pageInk = INK;
+  const readShadow = () => {
+    const css = getComputedStyle(document.documentElement);
+    shadowRgb = css.getPropertyValue('--shadow-rgb').trim() || shadowRgb;
+    pageInk = css.getPropertyValue('--ink').trim() || pageInk;
+  };
+  readShadow();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readShadow);
+
+  const MOODS = ['idle', 'happy', 'sparkle', 'sleepy', 'shy', 'wow', 'sad', 'focus', 'cool', 'angry', 'disappointed'];
+  const INFO = {
+    idle: ['Oval eyes with white catch-lights and an open smile. Blinks, glances, eyes dart.',
+      ['Login, waiting', "Today's cup is empty", 'Session paused', 'Onboarding, first hello']],
+    happy: ['Squinting ^ ^ eyes and a big open smile.',
+      ['Day saved at 5:00', '"Nice pour"', 'Toast after saving', 'Signing in', 'Goal typed']],
+    sparkle: ['Big eyes with star catch-lights.',
+      ['5:00 banner', 'Horizon complete', '6 or 9 month pact', '45 or 60 min a day']],
+    sleepy: ['Closed, content eyes, a little "o" and floating z\'s.',
+      ['Rest days', 'Settings']],
+    shy: ['Eyes squeezed shut > < with pink cheeks.',
+      ['Typing your password']],
+    wow: ['Big eyes and a round "O".',
+      ['A typo on Login', 'More than an hour a day', "An amount that won't fit"]],
+    sad: ['Worried brows, a frown and a tear.',
+      ['No days picked', 'Reset goal dialog']],
+    focus: ['Eyes up at the falling drops, a little "ooh".',
+      ['Pouring, before 5:00', 'Shelf while pouring']],
+    cool: ['Black shades and a smirk.',
+      ['Cup full', 'On target', '1 year pact', 'Every single day', 'Pact sealed', 'App icon']],
+    angry: ['Scowling brows, a tight mouth and an anger mark.',
+      ['Wrong password', 'Email already taken']],
+    disappointed: ['Heavy lids, a flat mouth and a sweat drop: -_-',
+      ['Spilled day', '"Let this pour go?"']],
+  };
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const state = { animate: !reduce.matches, facing: 0 };
+
+  // ---- Small math -------------------------------------------------------
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const mod = (a, n) => ((a % n) + n) % n;
+  const easeInOutCubic = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const mulberry32 = seed => () => {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+  const probe = document.createElement('canvas').getContext('2d');
+
+  // ---- Outline: segments -> dense polyline -> Path2D ---------------------
+  // A segment list: ['M', x, y], ['C', c1x, c1y, c2x, c2y, x, y], ['L', x, y].
+  function toPath(segs) {
+    const p = new Path2D();
+    for (const s of segs) {
+      if (s[0] === 'M') p.moveTo(s[1], s[2]);
+      else if (s[0] === 'L') p.lineTo(s[1], s[2]);
+      else p.bezierCurveTo(s[1], s[2], s[3], s[4], s[5], s[6]);
+    }
+    p.closePath();
+    return p;
+  }
+  function densify(segs) {
+    const pts = [];
+    let x = 0, y = 0;
+    for (const s of segs) {
+      if (s[0] === 'M') { x = s[1]; y = s[2]; pts.push([x, y]); continue; }
+      if (s[0] === 'L') {
+        const n = 24;
+        for (let i = 1; i <= n; i++) pts.push([x + (s[1] - x) * i / n, y + (s[2] - y) * i / n]);
+        x = s[1]; y = s[2]; continue;
+      }
+      const n = 48;
+      for (let i = 1; i <= n; i++) {
+        const t = i / n, m = 1 - t;
+        pts.push([
+          m * m * m * x + 3 * m * m * t * s[1] + 3 * m * t * t * s[3] + t * t * t * s[5],
+          m * m * m * y + 3 * m * m * t * s[2] + 3 * m * t * t * s[4] + t * t * t * s[6],
+        ]);
+      }
+      x = s[5]; y = s[6];
+    }
+    // Close back to the start.
+    const [x0, y0] = pts[0];
+    for (let i = 1; i <= 12; i++) pts.push([x + (x0 - x) * i / 12, y + (y0 - y) * i / 12]);
+    return pts;
+  }
+
+  // The outline, redrawn as if by hand: resampled into 72 points along its
+  // length and, while boiling, nudged in and out along the normal by a soft
+  // wave that changes every frame.
+  function boiled(segs, boil, amplitude) {
+    const pts = densify(segs);
+    const cum = [0];
+    for (let i = 1; i < pts.length; i++) {
+      cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    }
+    const total = cum[cum.length - 1];
+    const rnd = mulberry32((boil ?? 0) * 7919 + 13);
+    const ph = [rnd() * 6.283, rnd() * 6.283, rnd() * 6.283];
+    const amp = boil == null ? 0 : amplitude;
+    const n = 72, out = [];
+    let j = 1;
+    for (let i = 0; i < n; i++) {
+      const d = total * i / n;
+      while (j < cum.length - 1 && cum[j] < d) j++;
+      const seg = cum[j] - cum[j - 1] || 1;
+      const f = (d - cum[j - 1]) / seg;
+      const px = pts[j - 1][0] + (pts[j][0] - pts[j - 1][0]) * f;
+      const py = pts[j - 1][1] + (pts[j][1] - pts[j - 1][1]) * f;
+      let tx = pts[j][0] - pts[j - 1][0], ty = pts[j][1] - pts[j - 1][1];
+      const len = Math.hypot(tx, ty) || 1; tx /= len; ty /= len;
+      const th = 2 * Math.PI * i / n;
+      const w = amp * (0.6 * Math.sin(2 * th + ph[0]) + 0.3 * Math.sin(3 * th + ph[1]) + 0.2 * Math.sin(5 * th + ph[2]));
+      out.push([px - ty * w, py + tx * w]);
+    }
+    const half = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    const p = new Path2D();
+    const s0 = half(out[n - 1], out[0]);
+    p.moveTo(s0[0], s0[1]);
+    for (let i = 0; i < n; i++) {
+      const to = half(out[i], out[(i + 1) % n]);
+      p.quadraticCurveTo(out[i][0], out[i][1], to[0], to[1]);
+    }
+    p.closePath();
+    return p;
+  }
+
+  // The radius the face turns round: the drop's half-width at the top of the
+  // eyes, a little inside the edge.
+  function turnRadius(clean, right, face, u) {
+    const y = face.y - 1.4 * u;
+    let inside = face.x, outside = right + 1;
+    probe.setTransform(1, 0, 0, 1, 0, 0);
+    for (let i = 0; i < 14; i++) {
+      const x = (inside + outside) / 2;
+      if (probe.isPointInPath(clean, x, y)) inside = x; else outside = x;
+    }
+    return (inside - face.x) * 0.9;
+  }
+
+  // ---- The painter ------------------------------------------------------
+  function paintMascot(ctx, w, h, mood, pose, opts = {}) {
+    const frame = opts.frame || 'figure';
+    const mono = opts.mono || null;
+    ctx.save();
+    if (frame === 'figure') paintFigure(ctx, w, h, mood, pose, mono);
+    else paintPeek(ctx, w, h, mood, pose);
+    ctx.restore();
+  }
+
+  function paintFigure(ctx, w, h, mood, p, mono) {
+    const s = Math.min(w, h) / 100;
+    ctx.translate((w - 100 * s) / 2, (h - 100 * s) / 2);
+    ctx.scale(s, s);
+    if (!mono) {
+      const shrink = 1 - 0.35 * p.hop;
+      ctx.fillStyle = `rgba(${shadowRgb}, ${0.14 * shrink})`;
+      ctx.beginPath();
+      ctx.ellipse(50, 96.5, 27 * shrink * (1 + 0.1 * p.squash), 2.75 * shrink, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.translate(0, -12 * p.hop);
+    const sx = 1 - 0.012 * p.breathe + 0.1 * p.squash;
+    const sy = 1 + 0.02 * p.breathe - 0.1 * p.squash;
+    ctx.translate(50, 95); ctx.scale(sx, sy); ctx.translate(-50, -95);
+
+    const tx = 50 + 5 * Math.cos(p.turn);
+    const segs = [
+      ['M', tx, 4],
+      ['C', tx + 7, 16, 85, 34, 85, 62],
+      ['C', 85, 82, 69, 95, 50, 95],
+      ['C', 31, 95, 15, 82, 15, 62],
+      ['C', 15, 34, tx - 7, 16, tx, 4],
+    ];
+    const face = { x: 50, y: 62 }, u = 6.2;
+    creature(ctx, mood, p, {
+      body: boiled(segs, p.boil, 0.7),
+      face, u,
+      radius: turnRadius(toPath(segs), 85, face, u),
+      zAt: { x: 68, y: 8 }, zSize: 12, mono,
+    });
+  }
+
+  function paintPeek(ctx, w, h, mood, p) {
+    const lift = w * (0.006 * p.breathe - 0.03 * p.squash + 0.04 * p.hop);
+    const apex = w * 0.02 - lift;
+    const mid = w / 2;
+    const tx = mid + w * 0.035 * Math.cos(p.turn);
+    const side = w * 0.6;
+    const shoulder = apex + w * 0.8;
+    const segs = [
+      ['M', tx, apex],
+      ['C', tx + w * 0.08, apex + w * 0.14, mid + side, apex + w * 0.36, mid + side, shoulder],
+      ['L', mid + side, h + 10],
+      ['L', mid - side, h + 10],
+      ['L', mid - side, shoulder],
+      ['C', mid - side, apex + w * 0.36, tx - w * 0.08, apex + w * 0.14, tx, apex],
+    ];
+    const face = { x: mid, y: apex + w * 0.3 }, u = w * 0.048;
+    ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.clip();
+    creature(ctx, mood, p, {
+      body: boiled(segs, p.boil, w * 0.004),
+      face, u,
+      radius: turnRadius(toPath(segs), mid + side, face, u),
+      zAt: { x: mid + w * 0.18, y: apex + w * 0.04 }, zSize: w * 0.07, mono: null,
+    });
+  }
+
+  function creature(ctx, mood, p, o) {
+    const jitter = p.boil == null ? { x: 0, y: 0 }
+      : { x: Math.sin(p.boil * 2.1) * o.u * 0.05, y: Math.cos(p.boil * 1.7) * o.u * 0.05 };
+    const center = { x: o.face.x + jitter.x, y: o.face.y + jitter.y };
+    ctx.fillStyle = o.mono || BODY;
+    ctx.fill(o.body);
+    const shown = p.mood || mood;
+    drawFace(ctx, shown, p, center, o.u, o.radius, o.body, !!o.mono);
+    if (shown === 'sleepy' && !o.mono) drawZ(ctx, o.zAt, o.zSize, p);
+  }
+
+  function drawZ(ctx, at, size, p) {
+    for (let i = 0; i < 2; i++) {
+      const phase = mod(p.time / 2.4 + i * 0.5, 1);
+      ctx.save();
+      ctx.globalAlpha = 0.85 * clamp(Math.sin(phase * Math.PI), 0, 1);
+      // The z's float off the body, onto the page: use the page's ink.
+      ctx.fillStyle = pageInk;
+      ctx.font = `800 ${size * (0.75 + 0.35 * i)}px Rubik, Inter, sans-serif`;
+      ctx.textBaseline = 'top';
+      ctx.fillText('z', at.x + i * size * 0.7 + phase * size * 0.3, at.y - phase * size);
+      ctx.restore();
+    }
+  }
+
+  function drawFace(ctx, mood, pose, center, u, radius, body, cut) {
+    const ink = INK;
+    const stroke = (wid = 0.6) => {
+      ctx.lineWidth = wid * u; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = ink;
+    };
+    const line = (x0, y0, x1, y1, wid) => {
+      stroke(wid); ctx.beginPath(); ctx.moveTo(x0 * u, y0 * u); ctx.lineTo(x1 * u, y1 * u); ctx.stroke();
+    };
+    const curve = (x0, y0, cx, cy, x1, y1) => {
+      stroke(); ctx.beginPath(); ctx.moveTo(x0 * u, y0 * u); ctx.quadraticCurveTo(cx * u, cy * u, x1 * u, y1 * u); ctx.stroke();
+    };
+    const light = (a = 1) => { ctx.fillStyle = cut ? 'rgba(0,0,0,0)' : `rgba(255,255,255,${a})`; };
+    const fillInk = () => { ctx.fillStyle = ink; };
+    const oval = (cx, cy, rx, ry) => { ctx.beginPath(); ctx.ellipse(cx, cy, Math.max(rx, 0.01), Math.max(ry, 0.01), 0, 0, Math.PI * 2); };
+
+    // Place a feature on the belly; eyes and mouth are separate layers.
+    const at = (fx, fy, draw, mouth = false) => {
+      const look = pose.look;
+      const turn = mouth ? (pose.mouthTurn ?? pose.turn) : pose.turn;
+      const phi = Math.asin(clamp(fx * u / radius, -1, 1));
+      const a = phi + turn + look.x * (mouth ? 0.06 : 0.12);
+      const squeeze = Math.cos(a);
+      if (squeeze < 0.06) return;
+      const dy = mouth ? look.y * 0.25 - pose.squash * 0.35 : look.y * 0.45 + pose.squash * 0.2;
+      ctx.save();
+      ctx.translate(center.x + radius * Math.sin(a), center.y + (fy + dy) * u);
+      const stretch = mouth ? 1 : clamp(1 + 0.22 * pose.hop - 0.3 * pose.squash, 0.6, 1.4);
+      ctx.scale(squeeze, stretch);
+      draw();
+      ctx.restore();
+    };
+
+    const star = (r, cx, cy) => {
+      const inner = r * 0.3;
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) {
+        const a = -Math.PI / 2 + i * Math.PI / 4;
+        const rr = (i % 2 === 0 ? r : inner) * u;
+        const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+    };
+
+    const ovalEye = (rx, ry, open = 1, isStar = false) => {
+      if (open < 0.3) { line(-rx * 0.85, 0, rx * 0.85, 0); return; }
+      fillInk(); oval(0, 0, rx * u, ry * open * u); ctx.fill();
+      if (cut || open < 0.6) return;
+      light();
+      if (isStar) {
+        star(rx * 0.62, 0.05 * u, -0.12 * ry * u);
+        ctx.beginPath(); ctx.arc(-0.32 * rx * u, 0.5 * ry * u, 0.12 * u, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.beginPath(); ctx.arc(0.3 * rx * u, -0.38 * ry * u, 0.36 * rx * u, 0, Math.PI * 2); ctx.fill();
+      }
+    };
+    const brow = (side, inner, y) => line(-0.6, y + side * inner, 0.6, y - side * inner);
+
+    const eye = side => {
+      const open = 1 - pose.blink;
+      switch (mood) {
+        case 'idle': ovalEye(0.7, 1.0, open); break;
+        case 'focus': ctx.translate(0, -0.35 * u); ovalEye(0.7, 1.0, open); break;
+        case 'wow': ovalEye(0.78, 1.15, open); break;
+        case 'sparkle': ovalEye(0.82, 1.15, 1, true); break;
+        case 'happy': curve(-0.7, 0.3, 0, -0.75, 0.7, 0.3); break;
+        case 'sleepy': curve(-0.7, -0.15, 0, 0.65, 0.7, -0.15); break;
+        case 'shy':
+          // Squeezed shut, pointing inward: > <
+          line(side * 0.5, -0.6, -side * 0.45, 0);
+          line(-side * 0.45, 0, side * 0.5, 0.6);
+          break;
+        case 'sad': ovalEye(0.66, 0.9, open); brow(side, -0.16, -1.4); break;
+        case 'angry': ovalEye(0.66, 0.85, open); brow(side, 0.22, -1.2); break;
+        case 'disappointed':
+          ctx.save(); ctx.beginPath(); ctx.rect(-u, -0.05 * u, 2 * u, 1.05 * u); ctx.clip();
+          ovalEye(0.68, 0.92); ctx.restore();
+          line(-0.62, -0.05, 0.62, -0.05);
+          break;
+      }
+    };
+
+    const openMouth = (halfW, depth) => {
+      const w = halfW * u;
+      ctx.beginPath();
+      ctx.moveTo(-w, 0); ctx.lineTo(w, 0);
+      ctx.bezierCurveTo(w, depth * 1.33 * u, -w, depth * 1.33 * u, -w, 0);
+      ctx.closePath();
+      if (cut) { fillInk(); ctx.fill(); return; }
+      light(); ctx.fill(); stroke(0.45); ctx.stroke();
+    };
+    const roundO = (cy, w, h) => {
+      oval(0, cy * u, w * u / 2, h * u / 2);
+      if (cut) { fillInk(); ctx.fill(); return; }
+      light(); ctx.fill(); stroke(0.45); ctx.stroke();
+    };
+
+    const mouth = () => {
+      const talk = pose.talk;
+      if (talk != null) {
+        if (['idle', 'happy', 'sparkle', 'focus', 'wow'].includes(mood)) { openMouth(0.85, 0.25 + 0.85 * talk); return; }
+        if (['sad', 'angry', 'disappointed'].includes(mood)) { roundO(0.4, 0.95, 0.3 + 0.8 * talk); return; }
+      }
+      const breath = 1 + 0.08 * pose.breathe;
+      switch (mood) {
+        case 'idle': openMouth(0.95, 0.85 * breath); break;
+        case 'happy': case 'sparkle': openMouth(1.1, 1.05 * breath); break;
+        case 'sleepy': fillInk(); oval(0, 0.25 * u, 0.25 * u, 0.3 * u); ctx.fill(); break;
+        case 'focus': fillInk(); oval(0, 0.3 * u, 0.3 * u, 0.375 * u); ctx.fill(); break;
+        case 'wow': roundO(0.45, 1.0, 1.2); break;
+        case 'shy':
+          stroke(); ctx.beginPath();
+          ctx.moveTo(-0.6 * u, 0.2 * u);
+          ctx.quadraticCurveTo(-0.3 * u, -0.2 * u, 0, 0.2 * u);
+          ctx.quadraticCurveTo(0.3 * u, 0.6 * u, 0.6 * u, 0.2 * u);
+          ctx.stroke(); break;
+        case 'sad': curve(-0.55, 0.5, 0, -0.2, 0.55, 0.5); break;
+        case 'cool': curve(-0.6, 0.15, 0.15, 0.6, 0.75, -0.2); break;
+        case 'angry': line(-0.45, 0.15, 0.45, 0.0); break;
+        case 'disappointed': line(-0.5, 0.2, 0.5, 0.2); break;
+      }
+    };
+
+    const sunglasses = (eyeX, eyeY) => {
+      for (const side of [-1, 1]) {
+        at(side * eyeX * 1.05, eyeY, () => {
+          fillInk(); ctx.beginPath();
+          ctx.moveTo(-1.25 * u, -0.75 * u); ctx.lineTo(1.25 * u, -0.75 * u);
+          ctx.bezierCurveTo(1.3 * u, 0.6 * u, 0.75 * u, 1.1 * u, 0, 1.1 * u);
+          ctx.bezierCurveTo(-0.75 * u, 1.1 * u, -1.3 * u, 0.6 * u, -1.25 * u, -0.75 * u);
+          ctx.closePath(); ctx.fill();
+          if (!cut) {
+            ctx.lineWidth = 0.28 * u; ctx.lineCap = 'round'; ctx.strokeStyle = 'rgba(255,255,255,0.65)';
+            ctx.beginPath(); ctx.moveTo(-0.75 * u, -0.25 * u); ctx.lineTo(-0.2 * u, -0.25 * u); ctx.stroke();
+          }
+        });
+      }
+      at(0, eyeY - 0.6, () => line(-0.5, 0, 0.5, 0));
+    };
+
+    const smallDrop = r => {
+      const rr = r * u;
+      ctx.beginPath();
+      ctx.moveTo(0, -rr * 1.6);
+      ctx.bezierCurveTo(rr * 0.4, -rr * 0.7, rr, -rr * 0.4, rr, rr * 0.2);
+      ctx.arc(0, rr * 0.2, rr, 0, Math.PI, false);
+      ctx.bezierCurveTo(-rr, -rr * 0.4, -rr * 0.4, -rr * 0.7, 0, -rr * 1.6);
+      ctx.closePath();
+      light(0.95); ctx.fill();
+    };
+    const angerMark = () => {
+      stroke(0.32);
+      for (const qx of [-1, 1]) for (const qy of [-1, 1]) {
+        ctx.beginPath();
+        ctx.moveTo(qx * 0.25 * u, qy * 0.85 * u);
+        ctx.quadraticCurveTo(qx * 0.25 * u, qy * 0.25 * u, qx * 0.85 * u, qy * 0.25 * u);
+        ctx.stroke();
+      }
+    };
+
+    ctx.save();
+    ctx.clip(body);
+    if (cut) ctx.globalCompositeOperation = 'destination-out';
+    const eyeX = 1.65, eyeY = -0.55, mouthY = 1.15;
+
+    if (!cut && mood === 'shy') {
+      for (const side of [-1, 1]) {
+        at(side * 3.0, 0.9, () => { ctx.fillStyle = BLUSH; oval(0, 0, 0.9 * u, 0.5 * u); ctx.fill(); }, true);
+      }
+    }
+    if (mood === 'cool') sunglasses(eyeX, eyeY);
+    else for (const side of [-1, 1]) at(side * eyeX, eyeY, () => { ctx.translate(pose.dart.x * u, pose.dart.y * u); eye(side); });
+    const skew = mood === 'angry' || mood === 'disappointed';
+    at(skew ? 0.35 : 0, mouthY, mouth, true);
+    if (!cut) {
+      if (mood === 'sad') at(-eyeX + 0.25, 1.05, () => smallDrop(0.42));
+      if (mood === 'disappointed') at(3.3, -1.5, () => smallDrop(0.5));
+    }
+    if (mood === 'angry') at(3.1, -2.5, angerMark);
+    ctx.restore();
+  }
+
+  // ---- The animator (port of _LiveMascotState) --------------------------
+  const SPIN = 0.75, BLINK = 0.18, TALK = 1.2;
+  class Live {
+    constructor(mood, { facing = 0, hello = false, look = null } = {}) {
+      this.mood = mood; this.shown = mood; this.facing = facing;
+      this.time = 0; this.prev = 0;
+      this.nextBlink = 1 + Math.random() * 3;
+      this.spinAt = -10; this.landAt = -10;
+      this.nextGlance = 2 + Math.random() * 5; this.glance = 0; this.glanceTarget = 0;
+      this.look = { x: 0, y: 0 }; this.lookTarget = look || { x: 0, y: 0 };
+      this.mouthTurn = facing;
+      this.dart = { x: 0, y: 0 }; this.dartTarget = { x: 0, y: 0 }; this.nextDart = 1 + Math.random() * 2;
+      this.talkAt = hello ? 0.25 : -10;
+    }
+    setMood(m) {
+      if (m === this.mood) return;
+      if (this.time - this.spinAt >= SPIN / 2) this.spinAt = this.time;
+      this.mood = m;
+    }
+    spin() { if (this.time - this.spinAt >= SPIN) this.spinAt = this.time; }
+    talk() { this.talkAt = this.time; }
+    still() {
+      return { blink: 0, breathe: 0, squash: 0, look: { ...this.lookTarget }, turn: this.facing, hop: 0,
+        time: 0.6, boil: null, mood: this.mood, mouthTurn: null, dart: { x: 0, y: 0 }, talk: null };
+    }
+    tick(t) {
+      this.time = t;
+      const dt = clamp(t - this.prev, 0, 0.1);
+      this.prev = t;
+      if (t > this.nextBlink + BLINK) this.nextBlink = Math.random() < 0.2 ? t + 0.12 : t + 2.2 + Math.random() * 3.4;
+      const b = t - this.nextBlink;
+      const blink = (b < 0 || b > BLINK) ? 0 : Math.sin(b / BLINK * Math.PI);
+
+      const spin = (t - this.spinAt) / SPIN;
+      let turn = 0, hop = 0;
+      if (spin >= 0 && spin < 1) {
+        turn = 2 * Math.PI * easeInOutCubic(spin);
+        hop = Math.sin(spin * Math.PI);
+        if (spin >= 0.5) this.shown = this.mood;
+        this.landAt = this.spinAt + SPIN;
+      } else {
+        this.shown = this.mood;
+        if (t > this.nextGlance) {
+          this.glanceTarget = this.glanceTarget === 0 ? (Math.random() < 0.5 ? 0.45 : -0.45) : 0;
+          this.nextGlance = t + (this.glanceTarget === 0 ? 3.5 + Math.random() * 4 : 1.2);
+        }
+      }
+      const k = 1 - Math.pow(1 - 0.08, dt * 60);
+      this.glance += (this.glanceTarget - this.glance) * k;
+      const since = t - this.landAt;
+      const squash = (since >= 0 && since < 1) ? Math.sin(since * 14) * Math.exp(-since * 5) * 0.9 : 0;
+      const kl = 1 - Math.pow(1 - 0.1, dt * 60);
+      this.look.x += (this.lookTarget.x - this.look.x) * kl;
+      this.look.y += (this.lookTarget.y - this.look.y) * kl;
+      const turnNow = this.facing + turn + this.glance;
+
+      let lag = this.mouthTurn - turnNow;
+      lag = mod(lag + Math.PI, 2 * Math.PI) - Math.PI;
+      lag *= Math.exp(-dt / 0.07);
+      this.mouthTurn = turnNow + clamp(lag, -0.3, 0.3);
+
+      if (t > this.nextDart) {
+        this.dartTarget = Math.random() < 0.4 ? { x: 0, y: 0 }
+          : { x: (Math.random() - 0.5) * 0.5, y: (Math.random() - 0.5) * 0.25 };
+        this.nextDart = t + 1.2 + Math.random() * 2.2;
+      }
+      const kd = 1 - Math.exp(-dt / 0.035);
+      this.dart.x += (this.dartTarget.x - this.dart.x) * kd;
+      this.dart.y += (this.dartTarget.y - this.dart.y) * kd;
+
+      const talking = t - this.talkAt;
+      const talk = (talking >= 0 && talking < TALK)
+        ? (0.5 - 0.5 * Math.cos(2 * Math.PI * 4.2 * talking)) * Math.sin(Math.PI * talking / TALK)
+        : null;
+
+      return { blink, breathe: Math.sin(t * 2 * Math.PI / 3.6), squash, look: { ...this.look }, turn: turnNow,
+        hop, time: t, boil: Math.floor(t * 8), mood: this.shown, mouthTurn: this.mouthTurn, dart: { ...this.dart }, talk };
+    }
+  }
+
+  // ---- Stages: a canvas + a Live + how to paint it ----------------------
+  const stages = [];
+  function stage(canvas, live, opts = {}) {
+    const st = { canvas, live, opts, w: 0, h: 0, visible: true, ctx: canvas.getContext('2d') };
+    const fit = () => {
+      const r = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 3);
+      st.w = r.width; st.h = r.height;
+      canvas.width = Math.max(1, Math.round(r.width * dpr));
+      canvas.height = Math.max(1, Math.round(r.height * dpr));
+      st.dpr = dpr;
+      draw(st, performance.now());
+    };
+    new ResizeObserver(fit).observe(canvas);
+    new IntersectionObserver(e => { st.visible = e[0].isIntersecting; }).observe(canvas);
+    stages.push(st);
+    return st;
+  }
+  function draw(st, now) {
+    if (!st.w) return;
+    const { ctx } = st;
+    ctx.setTransform(st.dpr, 0, 0, st.dpr, 0, 0);
+    ctx.clearRect(0, 0, st.w, st.h);
+    const animate = state.animate && !st.opts.still;
+    const pose = animate ? st.live.tick(now / 1000) : st.live.still();
+    paintMascot(ctx, st.w, st.h, st.live.mood, pose, st.opts);
+    if (st.opts.after) st.opts.after(pose);
+  }
+  function loop(now) {
+    for (const st of stages) if (st.visible) draw(st, now);
+    requestAnimationFrame(loop);
+  }
+
+  // ---- Mood cards -------------------------------------------------------
+  const grid = document.getElementById('moods');
+  const cards = [];
+  for (const mood of MOODS) {
+    const [desc, uses] = INFO[mood];
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `${mood}: ${desc} Tap to spin and talk.`);
+    card.innerHTML = `
+      <div class="stage"><canvas aria-hidden="true"></canvas></div>
+      <h3 class="display">${mood}</h3>
+      <p>${desc}</p>
+      <div class="uses">${uses.map(u => `<span class="use">${u}</span>`).join('')}</div>`;
+    grid.appendChild(card);
+    const live = new Live(mood, { facing: state.facing });
+    stage(card.querySelector('canvas'), live);
+    const poke = () => { live.spin(); live.talk(); };
+    card.addEventListener('click', poke);
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); poke(); }
+    });
+    cards.push(live);
+  }
+
+  // ---- Playground -------------------------------------------------------
+  const big = new Live('idle', { facing: state.facing });
+  stage(document.getElementById('stage'), big, {
+    after: p => { document.getElementById('now-mood').textContent = p.mood; },
+  });
+  const buttons = document.getElementById('mood-buttons');
+  const moodButtons = {};
+  for (const mood of MOODS) {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button'; b.textContent = mood;
+    b.setAttribute('aria-pressed', mood === 'idle' ? 'true' : 'false');
+    b.addEventListener('click', () => pick(mood));
+    buttons.appendChild(b);
+    moodButtons[mood] = b;
+  }
+  function pick(mood) {
+    big.setMood(mood);
+    for (const [m, b] of Object.entries(moodButtons)) b.setAttribute('aria-pressed', m === mood ? 'true' : 'false');
+  }
+  document.getElementById('p-talk').addEventListener('click', () => big.talk());
+  document.getElementById('p-spin').addEventListener('click', () => big.spin());
+  document.getElementById('p-shuffle').addEventListener('click', () => {
+    const others = MOODS.filter(m => m !== big.mood);
+    pick(others[Math.floor(Math.random() * others.length)]);
+  });
+
+  // ---- Login peek -------------------------------------------------------
+  const peekBox = document.getElementById('peek');
+  const belly = document.getElementById('belly');
+  const fitPeek = () => { belly.style.paddingTop = `${peekBox.clientWidth * 0.46}px`; };
+  new ResizeObserver(fitPeek).observe(peekBox);
+  fitPeek();
+  const loginLive = new Live('idle');
+  stage(document.getElementById('peek-canvas'), loginLive, { frame: 'peek' });
+  const fEmail = document.getElementById('f-email'), fPass = document.getElementById('f-pass');
+  let typing = null;
+  const LOGIN = {
+    idle: () => { loginLive.setMood('idle'); loginLive.lookTarget = { x: 0, y: 0 }; },
+    email: () => {
+      loginLive.setMood('idle');
+      let i = 0; const text = 'me@example.com';
+      fEmail.classList.add('on');
+      typing = setInterval(() => {
+        i = Math.min(text.length, i + 1);
+        fEmail.textContent = text.slice(0, i) || 'Email';
+        loginLive.lookTarget = { x: -0.8 + 1.6 * Math.min(i / 24, 1), y: 0.9 };
+        if (i === text.length) clearInterval(typing);
+      }, 140);
+    },
+    password: () => {
+      fPass.classList.add('on'); fPass.textContent = '••••••••';
+      loginLive.setMood('shy'); loginLive.lookTarget = { x: 0, y: 0.9 };
+    },
+    typo: () => { loginLive.setMood('wow'); loginLive.lookTarget = { x: 0, y: 0 }; },
+    refused: () => { loginLive.setMood('angry'); loginLive.lookTarget = { x: 0, y: 0 }; },
+    busy: () => { loginLive.setMood('happy'); loginLive.lookTarget = { x: 0, y: 0 }; },
+  };
+  document.querySelectorAll('[data-login]').forEach(b => b.addEventListener('click', () => {
+    clearInterval(typing);
+    fEmail.classList.remove('on'); fPass.classList.remove('on');
+    if (b.dataset.login !== 'password') { fPass.textContent = 'Password'; }
+    if (b.dataset.login !== 'email') { fEmail.textContent = 'Email'; }
+    LOGIN[b.dataset.login]();
+  }));
+
+  // ---- Onboarding guide -------------------------------------------------
+  const GUIDE = [
+    [1, 'idle', "Hi! I'll be with you every day. Let's start with your one thing."],
+    [1, 'happy', '"Learn Judo". Love it!'],
+    [2, 'happy', 'A habit. Long enough to stick.'],
+    [3, 'sparkle', "Solid! That's about 68 hours of Learn Judo by 20 Jan."],
+    [4, 'happy', "Weekdays on, weekends off. Smart. That's about 28 hours of Learn Judo by 20 Jan."],
+    [4, 'sad', 'I need at least one day to pour into!'],
+    [5, 'cool', "That's the spirit. Let's do this!"],
+  ];
+  let gi = 0;
+  const guideLive = new Live('idle', { facing: 0.4, hello: true });
+  stage(document.getElementById('guide-canvas'), guideLive);
+  const arc = document.getElementById('pie-arc');
+  const circ = 2 * Math.PI * 20.5;
+  const showGuide = () => {
+    const [step, mood, msg] = GUIDE[gi];
+    document.getElementById('guide-msg').textContent = msg;
+    document.getElementById('pie-text').textContent = `${step}/5`;
+    arc.setAttribute('stroke-dasharray', `${circ * step / 5} ${circ}`);
+    guideLive.setMood(mood);
+  };
+  showGuide();
+  document.getElementById('guide-next').addEventListener('click', () => {
+    gi = (gi + 1) % GUIDE.length; showGuide(); guideLive.talk();
+  });
+
+  // ---- Coach bubble -----------------------------------------------------
+  const COACH = [
+    ['idle', "Today's cup is empty."],
+    ['focus', '4:12 to save the day.'],
+    ['happy', 'Day saved. Top it up to your goal?'],
+    ['cool', 'Cup full today. Well done.'],
+    ['sleepy', 'Rest day. See you tomorrow.'],
+    ['disappointed', "You missed this day. No use crying over it: let's not miss another."],
+  ];
+  let ci = 0;
+  const coachLive = new Live('idle', { facing: 0.4, hello: true });
+  stage(document.getElementById('coach-canvas'), coachLive);
+  const showCoach = () => {
+    const [mood, msg] = COACH[ci];
+    document.getElementById('coach-msg').textContent = msg;
+    coachLive.setMood(mood);
+  };
+  showCoach();
+  document.getElementById('coach-next').addEventListener('click', () => {
+    ci = (ci + 1) % COACH.length; showCoach(); coachLive.talk();
+  });
+
+  // ---- Icons and sizes --------------------------------------------------
+  const iconLive = new Live('cool', { facing: 0.3 });
+  stage(document.getElementById('icon-color'), iconLive, { still: true });
+  stage(document.getElementById('icon-mono'), new Live('idle', { facing: 0 }), { still: true, mono: '#FFFFFF' });
+  const sizes = document.getElementById('sizes');
+  for (const px of [32, 44, 56, 76]) {
+    const wrap = document.createElement('div');
+    wrap.className = 'icon';
+    const c = document.createElement('canvas');
+    c.style.width = `${px}px`; c.style.height = `${px}px`;
+    c.setAttribute('role', 'img'); c.setAttribute('aria-label', `Mascot at ${px} px`);
+    wrap.appendChild(c);
+    wrap.appendChild(document.createTextNode(`${px} px`));
+    sizes.appendChild(wrap);
+    stage(c, new Live('idle', { facing: 0.4 }));
+  }
+
+  // ---- Toolbar ----------------------------------------------------------
+  const tAnimate = document.getElementById('t-animate');
+  const tFacing = document.getElementById('t-facing');
+  tAnimate.setAttribute('aria-pressed', String(state.animate));
+  tAnimate.addEventListener('click', () => {
+    state.animate = !state.animate;
+    tAnimate.setAttribute('aria-pressed', String(state.animate));
+    if (!state.animate) for (const st of stages) draw(st, performance.now());
+  });
+  tFacing.addEventListener('click', () => {
+    state.facing = state.facing ? 0 : 0.4;
+    tFacing.setAttribute('aria-pressed', String(!!state.facing));
+    for (const live of [...cards, big]) live.facing = state.facing;
+    if (!state.animate) for (const st of stages) draw(st, performance.now());
+  });
+  document.getElementById('t-hello').addEventListener('click', () => {
+    [...cards, big, guideLive, coachLive, loginLive].forEach((l, i) => {
+      setTimeout(() => { l.spin(); l.talk(); }, i * 70);
+    });
+  });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => stages.forEach(st => draw(st, performance.now())));
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

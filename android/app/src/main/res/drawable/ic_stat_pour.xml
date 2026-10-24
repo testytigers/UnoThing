@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The logo glyph (T pouring a drop), white, for the status bar. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M7.02,5.52H16.98A1.5,1.5 0,0 1,16.98 8.52H7.02A1.5,1.5 0,0 1,7.02 5.52Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M10.27,7.2L10.9,12.96A1.1,1.1 0,0 0,13.1 12.96L13.73,7.2Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,14.69C12.5,16.2 14.06,16.1 14.06,17.47A2.06,2.06 0,0 1,9.94 17.47C9.94,16.1 11.5,16.2 12,14.69Z" />
+</vector>

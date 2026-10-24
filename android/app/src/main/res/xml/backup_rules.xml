@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and lower: back up only the app's database (drift keeps it in
+     app_flutter/, Flutter's documents directory). Reminders are rebuilt
+     from it on the next launch. -->
+<full-backup-content>
+    <include domain="root" path="app_flutter/" />
+</full-backup-content>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cream, matches AppTokens.light.background. -->
+    <color name="splash_background">#F6F2EA</color>
+</resources>
